@@ -1,5 +1,6 @@
 @rootAPI=http://localhost:8000/api/v1
 
+
 #=========== Admin API
 
 ### Create new admin
@@ -14,3 +15,15 @@ Content-Type: application/json
      "password":"a",
      "address":""
 }
+
+#============ Category API
+###
+POST {{rootAPI}}/category
+Content-Type: application/json
+
+{
+    "title":"Furnitures"
+}
+###
+GET {{rootAPI}}/category
+
