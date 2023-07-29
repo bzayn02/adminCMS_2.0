@@ -14,6 +14,11 @@ export const updateAdminById = ({ _id, ...rest }) => {
 export const updateVerifyAdmin = (filter, updateObj) => {
   return AdminSchema.findOneAndUpdate(filter, updateObj);
 };
+
+export const updateAdminWithRefreshJWT = (filter, updateObj) => {
+  return AdminSchema.findOneAndUpdate(filter, updateObj, { new: true });
+};
+
 export const deleteAdminById = (_id) => {
   return AdminSchema.findByIdAndDelete(_id);
 };

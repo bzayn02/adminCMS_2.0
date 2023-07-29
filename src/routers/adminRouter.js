@@ -1,7 +1,12 @@
 import express from 'express';
-import { hashPassword } from '../helpers/bcrypt.js';
-import { insertAdmin, updateVerifyAdmin } from '../model/admin/adminModel.js';
+import { comparePassword, hashPassword } from '../helpers/bcrypt.js';
 import {
+  getAdminByEmail,
+  insertAdmin,
+  updateVerifyAdmin,
+} from '../model/admin/adminModel.js';
+import {
+  loginValidation,
   newAdminValidation,
   newAdminVerificationValidation,
 } from '../middlewares/joiValidation.js';
@@ -10,6 +15,7 @@ import {
   accountVerifiedNotification,
 } from '../helpers/nodemailer.js';
 import { v4 as uuidv4 } from 'uuid';
+import { createAccessJWT, createRefreshJWT } from '../helpers/jwt.js';
 
 const router = express.Router();
 
@@ -80,5 +86,39 @@ router.post(
     }
   }
 );
+
+router.post('/sign-in', loginValidation, async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    // find user by email
+    const user = await getAdminByEmail(email);
+    if (user?._id) {
+      // compare password
+
+      const isMatched = comparePassword(password, user.password);
+
+      if (isMatched) {
+        const accessJWT = await createAccessJWT(email);
+        const refreshJWT = await createRefreshJWT(email);
+        console.log(accessJWT, refreshJWT);
+        // create 2 jwts
+        // create accessJWT and store in session table : short lived 15 min
+        // create refreshJWT and store with user data in user table :
+        return res.json({
+          status: 'success',
+          message: 'Signed in successfully.',
+          token: { accessJWT, refreshJWT },
+        });
+      }
+    }
+    res.json({
+      status: 'error',
+      message: 'Invalid login details.',
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;
