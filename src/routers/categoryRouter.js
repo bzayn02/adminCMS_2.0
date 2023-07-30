@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
+    console.log(req.userInfo);
     const result = await getCategories();
 
     res.json({

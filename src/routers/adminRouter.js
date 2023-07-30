@@ -16,11 +16,25 @@ import {
 } from '../helpers/nodemailer.js';
 import { v4 as uuidv4 } from 'uuid';
 import { createAccessJWT, createRefreshJWT } from '../helpers/jwt.js';
+import { auth } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
+// Get admin details
+router.get('/', auth, (req, res, next) => {
+  try {
+    res.json({
+      status: 'success',
+      message: 'Here is the user info.',
+      user: req.userInfo,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Create new admin
-router.post('/', newAdminValidation, async (req, res, next) => {
+router.post('/', auth, newAdminValidation, async (req, res, next) => {
   try {
     console.log(req.body);
     const { password } = req.body;

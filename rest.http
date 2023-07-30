@@ -16,6 +16,15 @@ Content-Type: application/json
      "address":""
 }
 
+### Login in
+POST {{rootAPI}}/admin/sign-in
+Content-Type: application/json
+
+{
+    "email":"bnag@gmail.com",
+    "password":"11111111"
+}
+
 #============ Category API
 ###
 POST {{rootAPI}}/category
@@ -26,4 +35,5 @@ Content-Type: application/json
 }
 ###
 GET {{rootAPI}}/category
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJuYWdAZ21haWwuY29tIiwiaWF0IjoxNjkwNjc5NjE5LCJleHAiOjE2OTA2Nzk2MjB9.mUAK4N2yI4s-ev7Zj0saBZA_h-IZe_n5k9nhTfrRaGI
 

@@ -4,10 +4,14 @@ import { updateAdminWithRefreshJWT } from '../model/admin/adminModel.js';
 
 export const createAccessJWT = async (email) => {
   const token = jwt.sign({ email }, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: '15m',
+    expiresIn: '10m',
   });
   await insertNewSession({ token, associate: email });
   return token;
+};
+
+export const verifyAccessJWT = (token) => {
+  return jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 };
 
 export const createRefreshJWT = async (email) => {

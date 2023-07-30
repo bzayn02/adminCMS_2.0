@@ -18,7 +18,8 @@ app.use(express.json());
 import adminRouter from './src/routers/adminRouter.js';
 app.use('/api/v1/admin', adminRouter);
 import categoryRouter from './src/routers/categoryRouter.js';
-app.use('/api/v1/category', categoryRouter);
+import { auth } from './src/middlewares/authMiddleware.js';
+app.use('/api/v1/category', auth, categoryRouter);
 
 app.get('/', (req, res) => {
   res.json({
