@@ -37,3 +37,7 @@ Content-Type: application/json
 GET {{rootAPI}}/category
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJuYWdAZ21haWwuY29tIiwiaWF0IjoxNjkwNjc5NjE5LCJleHAiOjE2OTA2Nzk2MjB9.mUAK4N2yI4s-ev7Zj0saBZA_h-IZe_n5k9nhTfrRaGI
 
+#===========Request new Access JWT API =============
+### GET NEW ACCESS TOKEN
+GET {{rootAPI}}/admin/get-accessjwt
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJuYWdAZ21haWwuY29tIiwiaWF0IjoxNjkwOTc2OTA5LCJleHAiOjE2OTM1Njg5MDl9.Kpxu2IMLYov75kIDg86rvnQHfsr8td4P2GYlnlp8AjA

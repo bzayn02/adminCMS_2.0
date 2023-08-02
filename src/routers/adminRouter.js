@@ -3,6 +3,7 @@ import { comparePassword, hashPassword } from '../helpers/bcrypt.js';
 import {
   getAdminByEmail,
   insertAdmin,
+  updateAdminById,
   updateVerifyAdmin,
 } from '../model/admin/adminModel.js';
 import {
@@ -16,7 +17,8 @@ import {
 } from '../helpers/nodemailer.js';
 import { v4 as uuidv4 } from 'uuid';
 import { createAccessJWT, createRefreshJWT } from '../helpers/jwt.js';
-import { auth } from '../middlewares/authMiddleware.js';
+import { auth, refreshAuth } from '../middlewares/authMiddleware.js';
+import { deleteSession } from '../model/session/sessionModel.js';
 
 const router = express.Router();
 
@@ -129,6 +131,39 @@ router.post('/sign-in', loginValidation, async (req, res, next) => {
     res.json({
       status: 'error',
       message: 'Invalid login details.',
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Return refresh JWT
+router.get('/', refreshAuth, (req, res, next) => {
+  try {
+    res.json({
+      status: 'success',
+      message: 'Here is the user info.',
+      user: req.userInfo,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Return refresh JWT
+router.get('/get-accessjwt', refreshAuth);
+
+// Admin Logout
+router.post('/signout', async (req, res, next) => {
+  try {
+    const { accessJWT, refreshJWT, _id } = req.body;
+    accessJWT && deleteSession(accessJWT);
+    if (refreshJWT && _id) {
+      await updateAdminById({ _id, refreshJWT: '' });
+    }
+
+    res.json({
+      status: 'success',
     });
   } catch (error) {
     next(error);
