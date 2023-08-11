@@ -20,6 +20,8 @@ app.use('/api/v1/admin', adminRouter);
 import categoryRouter from './src/routers/categoryRouter.js';
 import { auth } from './src/middlewares/authMiddleware.js';
 app.use('/api/v1/category', auth, categoryRouter);
+import paymentRouter from './src/routers/paymentOptionRouter.js';
+app.use('/api/v1/payment-options', auth, paymentRouter);
 
 app.get('/', (req, res) => {
   res.json({

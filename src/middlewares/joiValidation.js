@@ -92,3 +92,27 @@ export const updateCategoryValidation = (req, res, next) => {
     next(error);
   }
 };
+
+// Payment option
+
+export const newPaymentOptionValidation = (req, res, next) => {
+  try {
+    // Define schema
+    const schema = Joi.object({
+      status: SHORTSTRREQ,
+      title: SHORTSTRREQ,
+      description: SHORTSTRREQ,
+    });
+    // Check data against the rule
+
+    const { error } = schema.validate(req.body);
+    error
+      ? res.json({
+          status: 'error',
+          message: error.message,
+        })
+      : next();
+  } catch (error) {
+    next(error);
+  }
+};

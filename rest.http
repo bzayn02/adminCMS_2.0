@@ -41,3 +41,26 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJuYWdAZ21haWwu
 ### GET NEW ACCESS TOKEN
 GET {{rootAPI}}/admin/get-accessjwt
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJuYWdAZ21haWwuY29tIiwiaWF0IjoxNjkwOTc2OTA5LCJleHAiOjE2OTM1Njg5MDl9.Kpxu2IMLYov75kIDg86rvnQHfsr8td4P2GYlnlp8AjA
+
+
+
+##############  Payment Options ##########
+### POST NEW PAYMENT OPTION
+POST {{rootAPI}}/payment-options
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJuYWdAZ21haWwuY29tIiwiaWF0IjoxNjkxMjc5OTc3LCJleHAiOjE2OTEyODA4Nzd9.czGXwY6xtnHEqZmoq0PoA2adt67p2n70Cp0TSeVpH7A
+Content-Type: application/json
+
+{
+    "status":"inactive",
+    "title":"PayID",
+    "description":"Please use the following PayID to complete the payment for the purchase."
+}
+
+### Get all payments
+GET {{rootAPI}}/payment-options
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJuYWdAZ21haWwuY29tIiwiaWF0IjoxNjkxMjgxNDYzLCJleHAiOjE2OTEyODIzNjN9.c_unn3095Z3-ql4a0nPWqpb7O2HgSnldA_JtzMHLHpY
+
+
+
+
+

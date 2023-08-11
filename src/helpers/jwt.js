@@ -4,7 +4,7 @@ import { updateAdmin } from '../model/admin/adminModel.js';
 
 export const createAccessJWT = async (email) => {
   const token = jwt.sign({ email }, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: '10m',
+    expiresIn: '1m',
   });
   await insertNewSession({ token, associate: email });
   return token;

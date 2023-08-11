@@ -1,25 +1,23 @@
 import mongoose from 'mongoose';
 
-const categorySchema = new mongoose.Schema(
+const paymentSchema = new mongoose.Schema(
   {
     status: {
       type: String,
       default: 'inactive',
     },
+
     title: {
       type: String,
       required: true,
     },
 
-    slug: {
+    description: {
       type: String,
-      unique: true,
       required: true,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-export default mongoose.model('Category', categorySchema);
+export default mongoose.model('PaymentOption', paymentSchema);
