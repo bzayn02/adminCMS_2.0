@@ -29,7 +29,7 @@ router.post('/', async (req, res, next) => {
     const { title, slug } = req.body;
     !title &&
       res.json({ status: 'error', message: 'Category title is required.' });
-    console.log(title);
+
     const obj = {
       title,
       slug: slugify(title, { trim: true, lower: true }),

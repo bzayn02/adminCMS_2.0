@@ -9,17 +9,14 @@ export const auth = async (req, res, next) => {
   try {
     // 1. Get the accessJWT
     const { authorization } = req.headers;
-    console.log(authorization);
 
     // 2. Decode JWT
     const decoded = verifyAccessJWT(authorization);
-    console.log(decoded);
 
     // 3. Extract email and get user by email
     // 4. Check if user is active
     if (decoded?.email) {
       const user = await getAdminByEmail(decoded?.email);
-      console.log(user);
 
       if (user?._id && user?.status === 'active') {
         user.refreshJWT = undefined;
@@ -48,13 +45,11 @@ export const auth = async (req, res, next) => {
 export const refreshAuth = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
-    console.log(authorization);
 
     // 2. Decode JWT
     // 2. a. Check token exists in database
 
     const decoded = verifyRefreshJWT(authorization);
-    console.log(decoded);
     // 2.a. Make sure token exists in database
 
     // 3. Extract email and get user by email

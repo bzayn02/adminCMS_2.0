@@ -61,6 +61,8 @@ GET {{rootAPI}}/payment-options
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJuYWdAZ21haWwuY29tIiwiaWF0IjoxNjkxMjgxNDYzLCJleHAiOjE2OTEyODIzNjN9.c_unn3095Z3-ql4a0nPWqpb7O2HgSnldA_JtzMHLHpY
 
 
-
+############## Product API ###########
+### Get Products
+GET {{rootAPI}}/product
 
 

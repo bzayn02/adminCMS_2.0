@@ -38,7 +38,6 @@ router.get('/', auth, (req, res, next) => {
 // Create new admin
 router.post('/', auth, newAdminValidation, async (req, res, next) => {
   try {
-    console.log(req.body);
     const { password } = req.body;
     req.body.password = hashPassword(password);
 
@@ -86,7 +85,6 @@ router.post(
       const result = await updateVerifyAdmin(filter, updateObj);
 
       if (result?._id) {
-        console.log(result);
         await accountVerifiedNotification(result);
         res.json({
           status: 'success',
@@ -117,7 +115,6 @@ router.post('/sign-in', loginValidation, async (req, res, next) => {
       if (isMatched) {
         const accessJWT = await createAccessJWT(email);
         const refreshJWT = await createRefreshJWT(email);
-        console.log(accessJWT, refreshJWT);
         // create 2 jwts
         // create accessJWT and store in session table : short lived 15 min
         // create refreshJWT and store with user data in user table :
