@@ -33,6 +33,7 @@ const storage = multer.diskStorage({
     cb(error, fullFileName);
   },
 });
+
 const upload = multer({ storage });
 // where to store the file
 // what name to give

@@ -3,6 +3,7 @@ import { comparePassword, hashPassword } from '../helpers/bcrypt.js';
 import {
   getAdminByEmail,
   insertAdmin,
+  updateAdmin,
   updateAdminById,
   updateVerifyAdmin,
 } from '../model/admin/adminModel.js';
@@ -14,11 +15,18 @@ import {
 import {
   accountVerificationEmail,
   accountVerifiedNotification,
+  passwordChangeNotification,
+  sendOTPNotification,
 } from '../helpers/nodemailer.js';
 import { v4 as uuidv4 } from 'uuid';
 import { createAccessJWT, createRefreshJWT } from '../helpers/jwt.js';
 import { auth, refreshAuth } from '../middlewares/authMiddleware.js';
-import { deleteSession } from '../model/session/sessionModel.js';
+import {
+  deleteSession,
+  deleteSessionByFilter,
+  insertNewSession,
+} from '../model/session/sessionModel.js';
+import { OTPGenerator } from '../helpers/randomGenerator.js';
 
 const router = express.Router();
 
@@ -161,6 +169,90 @@ router.post('/signout', async (req, res, next) => {
 
     res.json({
       status: 'success',
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//  =========== Resetting Password ===========
+router.post('/request-otp', async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (email) {
+      // check user exists
+      const user = await getAdminByEmail(email);
+
+      if (user?._id) {
+        // create 6 digit otp and store along with session in session table
+        const otp = OTPGenerator();
+
+        // store otp and email in session table for future check
+        const obj = {
+          token: otp,
+          associate: email,
+        };
+        const result = await insertNewSession(obj);
+        if (result?._id) {
+          // send otp to their email
+          await sendOTPNotification({
+            otp,
+            email,
+            fname: user.fname,
+          });
+        }
+      }
+    }
+    res.json({
+      status: 'success',
+      message:
+        'If your email exists in our system you will get OTP in your mail box. Please check your email for instruction and OTP.',
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/reset-password', async (req, res, next) => {
+  try {
+    const { email, password, otp } = req.body;
+    if (email && password) {
+      // check if the token is valid and also delete the session (Deleting also checks and returns result)
+      const result = await deleteSessionByFilter({
+        token: otp,
+        associate: email,
+      });
+      if (result?._id) {
+        // check user exists
+        const user = await getAdminByEmail(email);
+        if (user?._id) {
+          // encrypt the password
+          const hashPass = hashPassword(password);
+
+          const updatedUser = await updateAdmin(
+            { email },
+            { password: hashPass }
+          );
+
+          if (updatedUser?._id) {
+            // send email notification
+            await passwordChangeNotification({
+              email,
+              fname: updatedUser.fname,
+            });
+
+            return res.json({
+              status: 'success',
+              message:
+                'Your password has been successfully updated. You may login now!',
+            });
+          }
+        }
+      }
+    }
+    res.json({
+      status: 'error',
+      message: 'Unable to process your request. Invalid request or token.',
     });
   } catch (error) {
     next(error);

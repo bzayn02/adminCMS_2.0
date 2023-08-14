@@ -8,3 +8,7 @@ export const insertNewSession = (obj) => {
 export const deleteSession = async (token) => {
   const data = await sessionSchema.findOneAndDelete({ token });
 };
+export const deleteSessionByFilter = async (filter) => {
+  const data = await sessionSchema.findOneAndDelete(filter);
+  return data;
+};
