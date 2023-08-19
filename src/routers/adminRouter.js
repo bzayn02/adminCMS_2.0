@@ -82,6 +82,27 @@ router.post('/', auth, newAdminValidation, async (req, res, next) => {
   }
 });
 
+router.put('/update-profile', auth, async (req, res, next) => {
+  try {
+    const { password } = req.body;
+    if (password !== undefined) {
+      req.body.password = hashPassword(password);
+    }
+    const result = await updateAdminById(req.body);
+    result?._id
+      ? res.json({
+          status: 'success',
+          message: 'Your profile has been successfully updated.',
+        })
+      : res.json({
+          status: 'error',
+          message: 'Unable to create new account. Please try again later.',
+        });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post(
   '/admin-verification',
   newAdminVerificationValidation,
