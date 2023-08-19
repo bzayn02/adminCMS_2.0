@@ -1,6 +1,7 @@
 import express from 'express';
 import { comparePassword, hashPassword } from '../helpers/bcrypt.js';
 import {
+  findAllAdmins,
   getAdminByEmail,
   insertAdmin,
   updateAdmin,
@@ -37,6 +38,20 @@ router.get('/', auth, (req, res, next) => {
       status: 'success',
       message: 'Here is the user info.',
       user: req.userInfo,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get all admin-users details
+router.get('/admin-users', auth, async (req, res, next) => {
+  try {
+    const admins = await findAllAdmins();
+    res.json({
+      status: 'success',
+      message: 'Here is the list of all admins.',
+      adminUsers: admins,
     });
   } catch (error) {
     next(error);

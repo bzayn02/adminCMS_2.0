@@ -3,6 +3,11 @@ import AdminSchema from './adminSchema.js';
 export const insertAdmin = (obj) => {
   return AdminSchema(obj).save();
 };
+
+export const findAllAdmins = () => {
+  return AdminSchema.find();
+};
+
 export const getAdminByEmail = (email) => {
   return AdminSchema.findOne({ email });
 };
