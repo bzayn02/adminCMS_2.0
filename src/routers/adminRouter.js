@@ -12,6 +12,7 @@ import {
   loginValidation,
   newAdminValidation,
   newAdminVerificationValidation,
+  updateAdminValidation,
 } from '../middlewares/joiValidation.js';
 import {
   accountVerificationEmail,
@@ -34,6 +35,7 @@ const router = express.Router();
 // Get admin details
 router.get('/', auth, (req, res, next) => {
   try {
+    req.userInfo.password = undefined;
     res.json({
       status: 'success',
       message: 'Here is the user info.',
@@ -97,26 +99,43 @@ router.post('/', auth, newAdminValidation, async (req, res, next) => {
   }
 });
 
-router.put('/update-profile', auth, async (req, res, next) => {
-  try {
-    const { password } = req.body;
-    if (password !== undefined) {
-      req.body.password = hashPassword(password);
+router.put(
+  '/update-profile',
+  auth,
+  updateAdminValidation,
+  async (req, res, next) => {
+    try {
+      const { currentPassword, ...info } = req.body;
+
+      const user = req.userInfo;
+      const isMatched = comparePassword(currentPassword, user.password);
+
+      if (isMatched) {
+        if (info?.password) {
+          info.password = hashPassword(info.password);
+        }
+        const result = await updateAdminById({ _id: user._id, ...info });
+        console.log(result, 'from udpate');
+        result?._id
+          ? res.json({
+              status: 'success',
+              message: 'Your profile has been successfully updated.',
+            })
+          : res.json({
+              status: 'error',
+              message: 'Unable to create new account. Please try again later.',
+            });
+        return;
+      }
+      res.json({
+        status: 'error',
+        message: 'Your password is incorrect. Please use the correct password.',
+      });
+    } catch (error) {
+      next(error);
     }
-    const result = await updateAdminById(req.body);
-    result?._id
-      ? res.json({
-          status: 'success',
-          message: 'Your profile has been successfully updated.',
-        })
-      : res.json({
-          status: 'error',
-          message: 'Unable to create new account. Please try again later.',
-        });
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 router.post(
   '/admin-verification',

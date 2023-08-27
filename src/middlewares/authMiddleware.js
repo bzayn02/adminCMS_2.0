@@ -20,7 +20,7 @@ export const auth = async (req, res, next) => {
 
       if (user?._id && user?.status === 'active') {
         user.refreshJWT = undefined;
-        user.password = undefined;
+        // user.password = undefined;
         req.userInfo = user;
         return next();
       }

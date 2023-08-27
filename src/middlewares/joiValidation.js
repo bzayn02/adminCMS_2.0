@@ -32,6 +32,31 @@ export const newAdminValidation = (req, res, next) => {
     next(error);
   }
 };
+export const updateAdminValidation = (req, res, next) => {
+  try {
+    // Define schema
+    const schema = Joi.object({
+      fname: SHORTSTR,
+      lname: SHORTSTR,
+      email: SHORTSTR.email({ minDomainSegments: 2 }),
+      phone: SHORTSTR,
+      address: SHORTSTR.allow(''),
+      password: SHORTSTR.min(8),
+      currentPassword: SHORTSTR.min(8),
+    });
+    // Check data against the rule
+
+    const { error } = schema.validate(req.body);
+    error
+      ? res.json({
+          status: 'error',
+          message: error.message,
+        })
+      : next();
+  } catch (error) {
+    next(error);
+  }
+};
 export const newAdminVerificationValidation = (req, res, next) => {
   try {
     // Define schema

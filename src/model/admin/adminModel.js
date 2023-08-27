@@ -15,7 +15,8 @@ export const getOneAdmin = (filter) => {
   return AdminSchema.findOne(filter);
 };
 export const updateAdminById = ({ _id, ...rest }) => {
-  return AdminSchema.findByIdAndUpdate(_id, rest);
+  console.log(_id, rest, 'from model');
+  return AdminSchema.findByIdAndUpdate(_id, rest, { new: true });
 };
 
 // @filter and @updateObj must be object
